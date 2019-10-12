@@ -20,8 +20,8 @@ int main() {
 		    issymetric = issymetric && (matrix[i][j] == matrix[j][i]);
 	
 	if (issymetric)
-		cout << "The matrix is symetric";
+		cout << "The matrix is symetric" << endl;
 	else
-		cout << "The matrix is not symetric";
+		cout << "The matrix is not symetric" << endl;
 	return 0;
 }
