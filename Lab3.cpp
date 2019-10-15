@@ -29,6 +29,8 @@ void AddToCollection(Collection &col, int element) {
         {
             col.elements[i] = tempArray[i];
         }
+	    
+	delete[] tempArray;
         col.elno++;
     }
 }
