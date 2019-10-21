@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <vector>
 using namespace std;
 
 int main() {
@@ -10,38 +9,30 @@ int main() {
 	string _template;
 	getline(cin, _template);
 	
-	vector<string> words;
-	int firstIndex, lastIndex;
-	bool wordFlag = false;
-	for (int i = 0; i < _template.size(); i++) {
-		if (_template[i] == '[') {
-			wordFlag = true;
-			firstIndex = i;
-		}
-		else if (_template[i] == ']') {
-			wordFlag = false;
-			words.push_back(_template.substr(firstIndex + 1, i - firstIndex));
-		}
-	}
+	size_t starter = 0;
+	size_t lClose = _template.find('[', starter);
+	size_t rClose = _template.find(']', starter + 1);
 	
-	vector<string> wordsValues;
-	for (int i = 0; i < values.size(); i++) {
-		if (values[i] == '=') {
-			wordFlag = true;
-			firstIndex = i + 1;
+	string pat, key, val;
+	size_t fChar, lChar, possition;
+
+	while (lClose != string::npos && rClose != string::npos) {
+
+		pat = _template.substr(lClose + 1, rClose - lClose - 1);
+		key = pat + '=';
+		fChar = values.find(key);
+		lChar = values.find(',', fChar);
+		if (fChar != string::npos) {
+			if (lChar == string::npos)
+				lChar = values.size();
+			possition = fChar + key.size();
+			val = values.substr(possition, lChar - possition);
+			_template.replace(lClose, rClose - lClose + 1, val);
 		}
-		else if (values[i] == ',') {
-			wordFlag = false;
-			wordsValues.push_back(values.substr(firstIndex, i - firstIndex));
-		}
-	}
-	wordsValues.push_back(values.substr(firstIndex, values.size() - firstIndex));
-	
-	string output;
-	unsigned int vector_size = words.size();
-	for (int i = 0; i < vector_size; i++) {
-		_template.replace(_template.find(words[i]) - 1, words[i].length() + 1, wordsValues[i]);
-    }
+		starter = rClose + 1;
+		lClose = _template.find('[', starter);
+		rClose = _template.find(']', starter + 1);
+    	}
 	
 	cout << _template << "\n";
 	return 0;
